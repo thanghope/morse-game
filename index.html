@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Học Morse</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+    .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); max-width: 600px; margin: auto; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 5px; text-align: center; }
+    button { padding: 10px 20px; margin-top: 20px; cursor: pointer; }
+    .question { font-size: 1.5em; margin: 20px 0; }
+    input { padding: 10px; font-size: 1em; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Game Học Mã Morse</h1>
+    <div id="home">
+      <h2>Bảng giải mã Morse</h2>
+      <table>
+        <tr><th>Ký tự</th><th>Morse</th></tr>
+        <tr><td>A</td><td>.-</td></tr>
+        <tr><td>B</td><td>-...</td></tr>
+        <tr><td>C</td><td>-.-.</td></tr>
+        <tr><td>D</td><td>-..</td></tr>
+        <tr><td>E</td><td>.</td></tr>
+        <tr><td>F</td><td>..-.</td></tr>
+        <tr><td>G</td><td>--.</td></tr>
+        <tr><td>H</td><td>....</td></tr>
+        <tr><td>I</td><td>..</td></tr>
+        <tr><td>J</td><td>.---</td></tr>
+        <tr><td>K</td><td>-.-</td></tr>
+        <tr><td>L</td><td>.-..</td></tr>
+        <tr><td>M</td><td>--</td></tr>
+        <tr><td>N</td><td>-.</td></tr>
+        <tr><td>O</td><td>---</td></tr>
+        <tr><td>P</td><td>.--.</td></tr>
+        <tr><td>Q</td><td>--.-</td></tr>
+        <tr><td>R</td><td>.-.</td></tr>
+        <tr><td>S</td><td>...</td></tr>
+        <tr><td>T</td><td>-</td></tr>
+        <tr><td>U</td><td>..-</td></tr>
+        <tr><td>V</td><td>...-</td></tr>
+        <tr><td>W</td><td>.--</td></tr>
+        <tr><td>X</td><td>-..-</td></tr>
+        <tr><td>Y</td><td>-.--</td></tr>
+        <tr><td>Z</td><td>--..</td></tr>
+      </table>
+      <p>Hãy học thuộc bảng trên. Khi sẵn sàng, bấm nút bắt đầu.</p>
+      <button id="start">Bắt đầu</button>
+    </div>
+
+    <div id="game" style="display:none;">
+      <div class="question" id="morseQuestion"></div>
+      <input type="text" id="answer" placeholder="Nhập nghĩa" />
+      <button id="submit">Kiểm tra</button>
+      <p id="feedback"></p>
+    </div>
+  </div>
+  <script>
+    const morseMap = {
+      "A": ".-", "B": "-...", "C": "-.-.", "D": "-..", "E": ".", "F": "..-.", "G": "--.", "H": "....", "I": "..", "J": ".---",
+      "K": "-.-", "L": ".-..", "M": "--", "N": "-.", "O": "---", "P": ".--.", "Q": "--.-", "R": ".-.", "S": "...", "T": "-",
+      "U": "..-", "V": "...-", "W": ".--", "X": "-..-", "Y": "-.--", "Z": "--.."
+    };
+
+    const words = [
+  "HELLO", "WORLD", "MORSE", "CODE", "TEST", "APPLE", "TABLE", "CHAIR", "HOUSE", "PHONE",
+  "HAPPY", "SMART", "GREAT", "FAST", "SLOW", "GOOD", "NICE", "COOL", "FINE", "SUNNY",
+  "RAIN", "CLOUD", "STORM", "WIND", "SNOW", "FIRE", "WATER", "EARTH", "MOON", "STAR",
+  "DOG", "CAT", "BIRD", "FISH", "DUCK", "LION", "TIGER", "BEAR", "SHEEP", "HORSE",
+  "LOVE", "HOPE", "PEACE", "DREAM", "FAITH", "LUCK", "HEART", "SMILE", "LAUGH", "CRY",
+  "RUN", "JUMP", "WALK", "SWIM", "PLAY", "WORK", "STUDY", "WRITE", "READ", "DRAW",
+  "FOOD", "PIZZA", "CAKE", "BREAD", "EGG", "RICE", "MEAT", "SOUP", "MILK", "TEA",
+  "COFFEE", "JUICE", "WINE", "BEER", "SODA", "MONEY", "GOLD", "SILVER", "IRON", "WOOD",
+  "BOOK", "PEN", "BAG", "BOX", "KEY", "LOCK", "DOOR", "WALL", "ROAD", "CAR",
+  "BIKE", "SHIP", "TRAIN", "PLANE", "BUS", "MAP", "FLAG", "CITY", "TOWN", "VILLAGE"
+];
+    let currentWord = "";
+
+    function encodeWord(word) {
+      return word.split("").map(c => morseMap[c]).join(" ");
+    }
+
+    document.getElementById("start").addEventListener("click", () => {
+      document.getElementById("home").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      nextQuestion();
+    });
+
+    function nextQuestion() {
+      currentWord = words[Math.floor(Math.random() * words.length)];
+      document.getElementById("morseQuestion").innerText = encodeWord(currentWord);
+      document.getElementById("answer").value = "";
+      document.getElementById("feedback").innerText = "";
+    }
+
+    document.getElementById("submit").addEventListener("click", () => {
+      const ans = document.getElementById("answer").value.toUpperCase();
+      if (ans === currentWord) {
+        document.getElementById("feedback").innerText = "Đúng rồi!";
+        setTimeout(nextQuestion, 1000);
+      } else {
+        document.getElementById("feedback").innerText = `Sai. Đáp án: ${currentWord}`;
+        setTimeout(nextQuestion, 2000);
+      }
+    });
+  </script>
+</body>
+</html>
